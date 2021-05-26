@@ -1,0 +1,19 @@
+[
+  {
+    "path": "posts/welcome/",
+    "title": "Welcome to DataViz Makeover",
+    "description": "Welcome to our new blog, DataViz Makeover. We hope you enjoy \nreading what we have to say!",
+    "author": [
+      {
+        "name": "Yin Xiaolan",
+        "url": "https://example.com/norajones"
+      }
+    ],
+    "date": "2021-05-26",
+    "categories": [],
+    "contents": "\r\n\r\n\r\n\r\n",
+    "preview": {},
+    "last_modified": "2021-05-26T14:23:02+08:00",
+    "input_file": "welcome.knit.md"
+  }
+]
