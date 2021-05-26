@@ -1,5 +1,22 @@
 [
   {
+    "path": "posts/DataViz Makeover 1/",
+    "title": "DataViz Makeover 1",
+    "description": "A new article created using the Distill format.",
+    "author": [
+      {
+        "name": "Yin Xiaolan",
+        "url": "https://www.linkedin.com/in/yin-xiaolan-840b561b8/"
+      }
+    ],
+    "date": "2021-05-26",
+    "categories": [],
+    "contents": "\r\nDistill is a publication format for scientific and technical writing, native to the web.\r\nLearn more about using Distill for R Markdown at https://rstudio.github.io/distill.\r\n\r\n\r\n\r\n",
+    "preview": {},
+    "last_modified": "2021-05-26T14:43:35+08:00",
+    "input_file": {}
+  },
+  {
     "path": "posts/welcome/",
     "title": "Welcome to DataViz Makeover",
     "description": "Welcome to our new blog, DataViz Makeover. We hope you enjoy \nreading what we have to say!",
@@ -14,6 +31,6 @@
     "contents": "\r\n\r\n\r\n\r\n",
     "preview": {},
     "last_modified": "2021-05-26T14:23:02+08:00",
-    "input_file": "welcome.knit.md"
+    "input_file": {}
   }
 ]

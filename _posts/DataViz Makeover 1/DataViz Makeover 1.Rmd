@@ -1,0 +1,25 @@
+---
+title: "DataViz Makeover 1"
+description: |
+  A new article created using the Distill format.
+author:
+  - name: Yin Xiaolan 
+    url: https://www.linkedin.com/in/yin-xiaolan-840b561b8/
+    affiliation: School of Computing and Information System - Singapore Management University
+    affiliation_url: https://scis.smu.edu.sg/
+date: "`r Sys.Date()`"
+output: distill::distill_article
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+Distill is a publication format for scientific and technical writing, native to the web. 
+
+Learn more about using Distill for R Markdown at <https://rstudio.github.io/distill>.
+
+
+
+
+
