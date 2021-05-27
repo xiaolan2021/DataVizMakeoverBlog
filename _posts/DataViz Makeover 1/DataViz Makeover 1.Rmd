@@ -1,14 +1,18 @@
 ---
 title: "DataViz Makeover 1"
 description: |
-  In the first DataViz Makeover, we are going to create a new visualization and some insights using the merchandise trade data.
+  In the first DataViz Makeover, we are going to create a new visualization and get some insights using the merchandise trade data.
 author:
   - name: Yin Xiaolan 
     url: https://www.linkedin.com/in/yin-xiaolan-840b561b8/
     affiliation: School of Computing and Information System - Singapore Management University
     affiliation_url: https://scis.smu.edu.sg/
 date: "`r Sys.Date()`"
-output: distill::distill_article
+output: 
+  distill::distill_article:
+    toc: true
+    toc_depth: 4
+    toc_float: true
 ---
 
 ```{r setup, include=FALSE}
@@ -17,58 +21,99 @@ knitr::opts_chunk$set(echo = FALSE)
 
 # 1.0 Critics
 
-The statistics on merchandise trade are from [Department of Statisitcs Singapore](https://www.singstat.gov.sg/find-data/search-by-theme/trade-and-investment/merchandise-trade/latest-data), 'Merchandise Trade by Region/Market.
+The statistics on merchandise trade are from [Department of Statisitcs Singapore](https://www.singstat.gov.sg/find-data/search-by-theme/trade-and-investment/merchandise-trade/latest-data), 'Merchandise Trade by Region/Market'.
 
-We are going to use the data set to get some insights.
+We are going to use this data set to get some insights.
 
-## 1.1 Original Visualization
+### 1.1 Original Visualization
 
-From the dataset we can see that there are import data and export data of hundreds of countries and the original visualization below select six countries to see the detials.
+From the data set we can see that there are import data and export data of hundreds of countries and the original visualization below select six countries to see the details in 2019-2020.
+
 ![](Image/Critic_originalviz.png)
 
-## 1.2 Critics of Clarity
+### 1.2 Critics of Clarity
 
-The original visualization has some drawbacks which may mislead readers or convey imformation unclearly.
+The original visualization has some drawbacks which may mislead readers or  convey inaccurate information.
 
-* The ‘month of period’ of Japan is different from all the other 5 countries, it only has 2020, which is inconsistent with the title.
+* The periods are not consistent. The ‘month of period’ of Japan is different from all the other 5 countries, it only has 2020, which is inconsistent with the title.
 
-* There are two Y-axes in every subpicture and the two Y-axes have different scales. This may confuse readers if the pictures are similar but the scales are significantly different. What’s more, the different scale of the Y-axis of all 6 pictures makes it difficult for readers to make the comparison among the 6 countries.
+* The Y axes are inconsistent. There are two Y-axes in every sub-picture, one for import and one for export. The two Y-axes have different scales. This may mislead readers if the pictures are similar but the scales are significantly different. What's more, the different scales of the Y-axes of all 6 sub-pictures makes it difficult for readers to make the comparison among the 6 countries.
 
-* The Y axis is not accurate. We can see from the raw data that the unit is thousand dollars, but there is no note to explain this. This will mislead readers to treate the actually 4M thousand dollars to be just 4M dollars.
+* The Y axes are not accurate. We can see from the raw data that the unit is thousand dollars, but there is no note to explain this in the original visualization. This will mislead readers to treat the actually 4M thousand dollars to be just 4M dollars.
+
+* The title is not accurate. The figure cannot reflect that the six countries are the top six trading countries. And from the data set we can see that the top six countries of import, export, or total values are all not consistent with the six countries in the figure.
+
+![](Image/Top Trade Countries.jpg)
 
 * There is no subtitle and the title only introduces what are the pictures but cannot convey the point the pictures are going to present. No lead-in or called-out to offer the context.
 
-* The title is not accurate. The figure cannot reflect that the six countries are the top six trading countries since from the dataset we can see that the top six countries of import, export, or total are all not consistent with the six countries in the figure.
+### 1.3 Critics of Aesthetics
 
-## 1.3 Critics of Aesthetics
+The original visualization has some parts may not be that beautiful.
 
-The original visualization has some parts may not that beautiful.
+* The area charts are not necessary. It does not convey any information, the overlap area makes is difficult to see clearly.
 
-* The area charts are not necessary, it does not convey any information, the overlap area makes is difficult to see clearly.
-
-* The color of import and export is not suitable, the overlap of light blue and light yellow makes the graph looks dirty, not clean.
+* The color of import and export is not suitable. The overlap of light blue and light yellow makes the graph looks dirty, not clean.
 
 * The separate of six sub-graph distract readers and will lead readers to treat them separately.
 
-
 # 2.0 Alternative Graphical Presentation
 
+We are going to create a sketch of what we are going to design, so that the following creating steps can go for that goal.
+
+### 2.1 Sketch
+
+![](Image/Sketch.jpg)
+
+### 2.2 Advantages
+
+#### 2.2.1 clarity
+
+* We keep the period of all six countries to 2019 - 2020 so that it is consistent within the graph and fit what we are going to express.
+
+* The Import and Export use the same Y axis. also, all six countries use the same Y axis. Then it is absolutely clear for readers to make comparison.
+
+* We add a note in a pair of brackets to make readers know the value unit is thousand dollars.
+
+* We edit the title from 'top six trading countries' to 'six large trading countries'. Avoid the misleading expression.
+
+* We edit the titles, add subtitles and annotations to graphs, and create dashboard titles.
+
+#### 2.2.2 Aesthetics
+
+* We use line chart instead of area chart to make the graph neat and clean.
+
+* We set the color to blue and red (and gray if one more color needed) to make it looks beautiful.
+
+* Instead of six separate sub-graph, we let the six countries next to each other so that readers will pay more attention to the comparison.
+
+#### 2.2.3 Other added information
+
+* Balance of Trade (BOT) is an important concept in analysis the trade, we add such a value in the graph to make it more straightforward. We use gray line to represent it.
+
+* Year-on-year Ratio helps to analysis the different between the trade values of this period and that of last period. We create a new line chart to reflect the year-on-year ratio of import and export of all six countries.
 
 # 3.0 Tableau Design
 
-[Trade Viz](https://public.tableau.com/app/profile/xiaolan.yin/viz/TradeVizforSixLargeTradingCountries/TradeViz)
+The final visualization is shown below.
+
+This link [Trade Viz](https://public.tableau.com/app/profile/xiaolan.yin/viz/TradeVizforSixLargeTradingCountries/TradeViz) provides the tableau public website.
+
+![](Image/Trade Viz.jpg)
 
 # 4.0 Step-by-step Description
 
 Now we comes to the details of creating the new visualization.
 
-# 4.1 Data Preparation
+### 4.1 Data Preparation
 
 First of all, we download the data 'outputFile.xlsx' from the official website and check all the data we have. It contains three sheets, one is content, one is T1 (import) and another is T2 (export).
 
 We can know that we have the import and export data of hundreds of countries in different time, the total number of countries of import and export are different (import 120 countries, export 92 countries), and the time period starts from Jan 1976, ends in Apr 2021.
 
-1. Get the sheet contains only the data without other information.
+#### 4.1.1 Get the data for Import/Export/BOT
+
+We just need to get the sheet contains only the data without other information.
 
 Open the excel, copy the T1 sheet, which contains the import data, named the new sheet 'import' and delete the rows contains other information before and after the data.
 
@@ -80,7 +125,9 @@ after:
 
 Do the same steps for export data (T2) and get a new sheet 'export'.
 
-2. Get the statistic of import and export compare with the performance last year, only for 2020.
+#### 4.1.2 Get the data for year-on-year ratio graph
+
+We are going to get the statistic of import and export compare with the performance last year, only for 2020.
 
 Make copies of import and export sheet, named 'Im_inter' and 'Ex_inter'. In the 'Im_inter' sheet, select the cells of first row and add a filter. In the 'variables' column select the specific six countries.
 
@@ -97,15 +144,16 @@ We copy all the percentage statistics and prepare a new sheet 'Im_yoyr' for furt
 ![](Image/DataPrep_im_yr-on-yr_ratio.png)
 Then do the same steps for export part and get a new sheet 'Ex_yoyr'.
 
-## 4.2 Data Visualization
+### 4.2 Data Visualization
 
 Now we open the tableau and start to create our visualization.
 
-1. Set the data source.
+#### 4.2.1 Set the data source
 
 We import the 'outputFile.xlsx' and drag the 'import' to the up right window. Select the columns from '1976 Jan' to 'Apr 2021' by click the first column, press 'shift' and click the last column, right click and select 'pivot'.
 
 ![](Image/Tab_pivot.png)
+
 Then change the name of the three columns to 'country', 'period' and 'merchandise import'. Click the 'abc' icon above 'period' column and change the data type to date, change the type of 'merchandise import' from 'abc' to 'number(decimal)' using the same way. Now the table looks like this.
 
 ![](Image/Tab_dataname&type.png)
@@ -121,7 +169,8 @@ Drag the 'Im_yoyr' to the window link to import. select all the columns exclude 
 Do the same steps for 'Ex_yoyr' and the result should looks like the figure below.
 
 ![](Image/Tab_ex_yoyr.png)
-2. Make a new visualization of the import and export data of the six countries from 2019 to 2020.
+
+#### 4.2.2 Set the correct data category
 
 First we check the 'Tables' and change the 'merchandise import' and 'merchandise export' from discrete to continuous.
 
@@ -131,12 +180,17 @@ And Drag 'merchandise import' below.
 
 ![](Image/Tab_convert2continuous02.png)
 
+#### 4.2.3 Create a visualization for Import/Export/BOT
+
+We are going to make a new visualization of the import and export data of the six countries from 2019 to 2020.
+
 First we drag the 'Country' of 'Import' to 'Filters' and check the six countries (Hong Kong, Japan, Mainland China, Malaysia, Taiwan, US), click OK.
 
 ![](Image/Tab_newviz_filtercountry.png)
 Then we drag 'Periof' of 'Import' to 'Filters' and select '#year' click next and check only 2019, 2020.
 
 ![](Image/Tab_newviz_filterperiod.png)
+
 We drag 'Country' and 'Period' from 'Import' to columns, click the plus icon to get the 'month' of 'period', and change the 'month' from discrete to continuous. Then we drag 'Quarter' and 'year' out.
 
 ![](Image/Tab_newviz_column01.png)
@@ -144,6 +198,7 @@ We drag 'Country' and 'Period' from 'Import' to columns, click the plus icon to 
 We drag 'merchandise import' from 'import' to rows. Then drag 'merchandise export' from 'export' to the Y axis.
 
 ![](Image/Tab_rows01.png)
+
 Click the triangle above 'Tables' and select 'create calculate field', set the name to 'Balance of Trade' and the formula is 'Balance of Trade = value of Exports - value of Imports'.
 
 ![](Image/Tab_balanceoftrade02.png)
@@ -161,15 +216,19 @@ Right click columns label area and select hide field labels for columns.
 Right click Y axis and change the name of Y axis to 'Value of Import/Export/Balance of Trade (Thousand Dollars)'.
 
 ![](Image/Tab_ChangeYtitle.png)
+
 ![](Image/Tab_Ytitle.png)
+
 Right click the country name, select edit the X alias for all six countries, delete the space before country name and the note after country name.
 
 ![](Image/Tab_EditX.png)
+
 ![](Image/Tab_Xtitle.png)
 
 Then right click title area and edit the title and subtitle.
 
 ![](Image/Tab_tradetitle.png)
+
 ![](Image/Tab_edittitle.png)
 
 Right click the white space in the graph, hang on annotate and select area to add the annotation to the graph.
@@ -185,7 +244,9 @@ The final 'Merchandise Trade' is as follow.
 
 ![](Image/Merchandise Trade.jpg)
 
-3. Create a line chart to show the year-on-year ratio of both import and export values for the six countries.
+#### 4.2.4 Create a visualization for year-on-year ratio
+
+We are going to create a line chart to show the year-on-year ratio of both import and export values for the six countries.
 
 We drag the 'Period im yoyr' from 'Im_yoyr' to columns, change the level from year to month, and change it from discrete to continuous, remove 'quarter' and 'year'.
 
@@ -200,14 +261,16 @@ We can see the draft as figure below.
 Then we start modify the graph. We edit the title and subtitle, edit the Y axis title, right click the X axis and select edit axis and delete the title in the newly appeared window.
 
 ![](Image/Tab_editXaxis.png)
+
 ![](Image/Tab_deleteXaxis.png)
+
 Then we edit the legend by right click every country label and select edit alias. We keep the country name only.
 
 Finally add some annotates.The final 'Year-on-year Ratio' is as follow.
 
 ![](Image/Year-on-year Ratio.jpg)
 
-4. Create a dash board.
+#### 4.2.5 Create a dash board
 
 We drag the 'Merchandise Trade' and 'Year-on-year Ratio' to the dashboard and adjust them.
 
@@ -218,11 +281,36 @@ Then we check 'show dashboard title' and then edit it.
 Right click the dashboard title area and select format title, select two different light gray for the dashboard background and title shading.
 
 ![](Image/Tab_formattitle.png)
+
 ![](Image/Tab_dashbrardshading.png)
 
 The final dashboard snapshot is as follow.
 
-
-
+![](Image/Trade Viz.jpg)
 
 # 5.0 Observations
+
+### 5.1 Value of Imports/Exports
+
+We can see that Mainland China has the largest import and export values among these six countries. Hong Kong has significantly lower Import value. Japan and Taiwan have relatively similar Export values.
+
+From this point of view, we can see that Mainland China has the largest scale of merchandise trade among all the six countries.
+
+![](Image/Ob_101.png)
+
+### 5.2 Balance of Trade
+
+We can see from the gray lines that Japan seems to have an average of balance of trade closest to 0. Japan and Taiwan have similar Export, but Taiwan has higher trade deficit since it has higher Import. What's more, Hong Kong faced a high trade surplus since it has a high Export but low Import.
+
+
+
+![](Image/ob_201.png)
+
+### 5.3 Year-on-year Ratio
+
+From the year-on-year ratio graph we can see that all the export year-on-year ratios of US are above 0, and all the import year-on-year ratios except one of March are below 0. In other word, the export value of US in 2020 has been witnessed to be increased compared to the previous period while the import value decreased generally.
+
+It also can be confirmed from balance of trade. We can see that US is going trade surplus in 2020 from trade deficit in 2019.
+
+![](Image/ob_301.png)
+
