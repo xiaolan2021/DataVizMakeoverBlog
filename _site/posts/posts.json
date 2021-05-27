@@ -1,22 +1,5 @@
 [
   {
-    "path": "posts/welcome/",
-    "title": "Welcome to DataViz Makeover",
-    "description": "Welcome to our new blog, DataViz Makeover. We hope you enjoy \nreading what we have to say!",
-    "author": [
-      {
-        "name": "Yin Xiaolan",
-        "url": "https://example.com/norajones"
-      }
-    ],
-    "date": "2021-05-26",
-    "categories": [],
-    "contents": "\r\n\r\n\r\n\r\n",
-    "preview": {},
-    "last_modified": "2021-05-26T14:23:02+08:00",
-    "input_file": {}
-  },
-  {
     "path": "posts/DataViz Makeover 1/",
     "title": "DataViz Makeover 1",
     "description": "In the first DataViz Makeover, we are going to create a new visualization and get some insights using the merchandise trade data.",
@@ -32,5 +15,22 @@
     "preview": {},
     "last_modified": "2021-05-27T16:39:41+08:00",
     "input_file": "DataViz-Makeover-1.knit.md"
+  },
+  {
+    "path": "posts/welcome/",
+    "title": "Welcome to DataViz Makeover",
+    "description": "Welcome to ISSS608 DataViz Makeover. These are the visualizations made by Yin Xiaolan.",
+    "author": [
+      {
+        "name": "Yin Xiaolan",
+        "url": "https://www.linkedin.com/in/yin-xiaolan-840b561b8/"
+      }
+    ],
+    "date": "2021-05-26",
+    "categories": [],
+    "contents": "\r\n\r\n\r\n\r\n",
+    "preview": {},
+    "last_modified": "2021-05-27T16:48:52+08:00",
+    "input_file": "welcome.knit.md"
   }
 ]
