@@ -89,9 +89,9 @@ We are going to create a sketch of what we are going to design, so that the foll
 
 #### 2.2.3 Other added information
 
-* Balance of Trade (BOT) is an important concept in analysis the trade, we add such a value in the graph to make it more straightforward. We use gray line to represent it.
+* Balance of Trade (BOT, export - import) is an important concept in analysis the trade, we add such a value in the graph to make it more straightforward. We use gray lines to represent it.
 
-* Year-on-year Ratio helps to analysis the different between the trade values of this period and that of last period. We create a new line chart to reflect the year-on-year ratio of import and export of all six countries.
+* Year-on-year Ratio helps to analysis the different between the trade values of this period and that of last period. We create a new line chart to reflect the year-on-year ratio of import and export of all six countries. From this chart we can see the increase or decrease in the same month of different years.
 
 # 3.0 Tableau Design
 
@@ -203,29 +203,29 @@ Click the triangle above 'Tables' and select 'create calculate field', set the n
 
 ![](Image/Tab_balanceoftrade02.png)
 
-Drag the 'Balance of Trade' from 'Measure Names' to the Y axis and change the color of the three lines.
+Drag the 'Balance of Trade' from 'Measure Names' to the Y axis and change the color of the three lines to make it more beautiful and clear.
 
 ![](Image/Tab_newviz01.png)
 
 Finally, we do following steps to modify the graph.
 
-Right click columns label area and select hide field labels for columns.
+Right click columns label area and select hide field labels for columns. We are going to hide the 'country' label since the name of the six countries are already enough to let readers know that the columns are about countries.
 
 ![](Image/Tab_hidecolumnlabel.png)
 
-Right click Y axis and change the name of Y axis to 'Value of Import/Export/Balance of Trade (Thousand Dollars)'.
+Right click Y axis and change the name of Y axis to 'Value of Import/Export/Balance of Trade (Thousand Dollars)'. The original name of Y axis is just 'value', which cannot let readers know that the unit is thousand dollars, we add this information to a pair of brankets to inform the readers.
 
 ![](Image/Tab_ChangeYtitle.png)
 
 ![](Image/Tab_Ytitle.png)
 
-Right click the country name, select edit the X alias for all six countries, delete the space before country name and the note after country name.
+Right click the country name, select edit the X alias for all six countries, delete the space before country name and the note after country name to let the country name looks more neat and clear and avoid redundence since we have already include the unit information in the Y axis label.
 
 ![](Image/Tab_EditX.png)
 
 ![](Image/Tab_Xtitle.png)
 
-Then right click title area and edit the title and subtitle.
+Then right click title area and edit the title and subtitle to make the title more accurate and include some important introduction about the picture in the subtitle.
 
 ![](Image/Tab_tradetitle.png)
 
@@ -233,9 +233,13 @@ Then right click title area and edit the title and subtitle.
 
 Right click the white space in the graph, hang on annotate and select area to add the annotation to the graph.
 
+We are going to highlight some information to readers in the picture by adding the annotations.
+
 ![](Image/Tab_addannotation.png)
 
 Right click the legend, select edit title and delete it in the new window. Then right click 'Merchandise Import' and select edit alias to delete 'Merchandise' and remain 'Import'. Do the same for 'Export'.
+
+We edit the legend to make it looks more tidy.
 
 ![](Image/Tab_editlegendtitle.png)
 ![](Image/Tab_deletelegendtitle.png)
@@ -258,15 +262,17 @@ We can see the draft as figure below.
 
 ![](Image/Tab_yoyr01.png)
 
-Then we start modify the graph. We edit the title and subtitle, edit the Y axis title, right click the X axis and select edit axis and delete the title in the newly appeared window.
+Then we start modify the graph. We edit the title and subtitle to give the core information, edit the Y axis title, right click the X axis and select edit axis and delete the title in the newly appeared window since the month names are enough to let readers know that X axis is about the time period.
 
 ![](Image/Tab_editXaxis.png)
 
 ![](Image/Tab_deleteXaxis.png)
 
-Then we edit the legend by right click every country label and select edit alias. We keep the country name only.
+Then we edit the legend by right click every country label and select edit alias. We keep the country name only to make it looks tidy.
 
-Finally add some annotates.The final 'Year-on-year Ratio' is as follow.
+Finally add some annotates to let readers know the main information we are going to convey.
+
+The final 'Year-on-year Ratio' is as follow.
 
 ![](Image/Year-on-year Ratio.jpg)
 
@@ -276,9 +282,11 @@ We drag the 'Merchandise Trade' and 'Year-on-year Ratio' to the dashboard and ad
 
 Then we check 'show dashboard title' and then edit it.
 
+We introduce the visualization is about the 'trade of six large trading countries' in the dashboard title, so that we do not need to include this information in both title of the two graphs from two sheets.
+
 ![](Image/Tab_showdashboardtitel.png)
 
-Right click the dashboard title area and select format title, select two different light gray for the dashboard background and title shading.
+Right click the dashboard title area and select format title, select two different light gray for the dashboard background and title shading to make it looks beautiful.
 
 ![](Image/Tab_formattitle.png)
 
