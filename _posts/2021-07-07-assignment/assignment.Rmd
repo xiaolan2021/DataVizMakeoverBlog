@@ -1,0 +1,516 @@
+---
+title: "assignment"
+description: |
+  A short description of the post.
+author:
+  - name: Yin Xiaolan
+    url: https://www.linkedin.com/in/yin-xiaolan-840b561b8/
+date: 07-07-2021
+output:
+  distill::distill_article:
+    self_contained: false
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Introduction
+
+Mini-Challenge 2 asks you to analyze movement and tracking data. GAStech provides many of their employees with company cars for their personal and professional use, but unbeknownst to the employees, the cars are equipped with GPS tracking devices. You are given tracking data for the two weeks leading up to the disappearance, as well as credit card transactions and loyalty card usage data. From this data, can you identify anomalies and suspicious behaviors? Can you identify which people use which credit and loyalty cards?
+
+# Data Preparation
+
+### load packages
+
+The code chunk below will check if the necessary R packages have been installed, if not, R will install the missing R packages before launching them.
+
+```{r}
+packages = c('tidyverse', 'raster', 'sf', 'tmap', 'clock', 'rgdal', 'ggiraph', 'plotly', 'DT', 'lubridate', 'grid', 'mapview')
+for (p in packages){
+  if(!require(p, character.only = T)){
+    install.packages(p)
+  }
+  library(p, character.only = T)
+}
+```
+
+### load data
+
+```{r}
+car_assign <- read_csv("data/car-assignments.csv")
+cc <- read_csv("data/cc_data.csv")
+gps <- read_csv("data/gps.csv")
+loyalty <- read_csv("data/loyalty_data.csv")
+```
+
+
+```{r}
+# car assignment
+car_assign$CarID <- as_factor(car_assign$CarID)
+
+# cc data
+cc$timestamp <- date_time_parse(cc$timestamp,
+                                zone = "",
+                                format = "%m/%d/%Y %H:%M")
+
+cc_year <- year(cc$timestamp)
+cc_month <- month(cc$timestamp)
+cc_day <- mday(cc$timestamp)
+cc_hour <- hour(cc$timestamp)
+
+cc$hour <- hour(cc$timestamp)
+cc$wd <- wday(cc$timestamp, label = TRUE, abbr = FALSE)
+cc$ts_new <- make_datetime(cc_year, cc_month, cc_day, cc_hour)
+
+cc$last4ccnum <- as.character(cc$last4ccnum)
+cc$count <- 1
+cc$type <- "cc"
+cc$loca_usable <- iconv(cc$location, "ASCII", "UTF-8", sub = "")
+
+# loyalty
+loyalty$timestamp <- date_time_parse(loyalty$timestamp,
+                                     zone = "",
+                                     format = "%m/%d/%Y")
+loyalty$wd <- wday(loyalty$timestamp, label = TRUE, abbr = FALSE)
+loyalty$count <- 1
+loyalty$type <- "loyalty"
+loyalty$loca_usable <- iconv(loyalty$location, "ASCII", "UTF-8", sub = "")
+```
+
+
+```{r}
+
+
+
+```
+
+# EDA
+
+```{r}
+
+```
+
+# Analysis
+
+
+### task1
+
+#### introduction
+
+Using just the credit and loyalty card data, identify the most popular locations, and when they are popular. What anomalies do you see? What corrections would you recommend to correct these anomalies? Please limit your answer to 8 images and 300 words.
+
+```{r}
+# ccbar <- ggplot(data = cc) +
+#   geom_bar(mapping = aes(x = loca_usable)) +
+#   coord_flip()
+# 
+# loybar <- ggplot(data = loyalty) +
+#   geom_bar(mapping = aes(x = loca_usable)) +
+#   coord_flip()
+# 
+# subplot(ccbar, loybar)
+```
+
+
+
+```{r}
+cc_count <- aggregate(x = cc$count, by = list(cc$type, cc$loca_usable), sum)
+cc_price <- aggregate(x = cc$price, by = list(cc$type, cc$loca_usable), sum)
+
+
+loy_count <- aggregate(x = loyalty$count, by = list(loyalty$type, loyalty$loca_usable), sum)
+loy_price <- aggregate(x = loyalty$price, by = list(loyalty$type, loyalty$loca_usable), sum)
+
+count_all <- union(cc_count, loy_count)
+price_all <- union(cc_price, loy_price)
+
+names(count_all)[1] <- "type"
+names(count_all)[2] <- "location"
+names(count_all)[3] <- "count"
+names(price_all)[1] <- "type"
+names(price_all)[2] <- "location"
+names(price_all)[3] <- "sum"
+
+count_price <- merge(count_all, price_all, by = c("location", "type"), all = TRUE)
+```
+
+```{r}
+d <- highlight_key(count_price)
+
+count_bar <- ggplot(data = d, aes(x = location, y = count, fill = type)) +
+  geom_bar(stat = "identity", position = position_dodge()) +
+  coord_flip() +
+  ggtitle("Number of transactions (left) and Total transaction amount (right) in different locations") +
+  theme(legend.position = "none")
+
+price_bar <- ggplot(data = d, aes(x = location, y = sum, fill = type)) +
+  geom_bar(stat = "identity", position = position_dodge()) +
+  coord_flip()
+
+subplot(ggplotly(count_bar),
+        ggplotly(price_bar))
+```
+
+The left figure shows the count and the right shows the total price amount. 
+
+From the number of transactions in different locations we can see that there are some place where the employees often go, some seldom go.
+
+The place most popular is Katerina's Cafe, where around 200 transactions happened for both credit card and loyalty card in the specific two weeks. Then come to Hippokampos, Guy's Gyros and Brew've Been Served. Those places are all near the company GAS tech and is suitable for meals.
+
+From the total transactions amount in different locations we can see that there are some places people do not go that often but spend much money, for example, Abila Airport, Carlyle Chemical Inc., Nationwide Refinary and Stewart and Sons Fabrication.
+
+```{r}
+cc_ag <- aggregate(x = cc$count, by = list(cc$loca_usable, cc$wd), sum)
+
+names(cc_ag)[1] <- "loca_usable"
+names(cc_ag)[2] <- "wd"
+names(cc_ag)[3] <- "count"
+
+ggplot(cc_ag, aes(wd, loca_usable, fill = count)) +
+  geom_tile() +
+  ggtitle("weekly heatmap of cc transactions")
+```
+
+```{r}
+loy_ag <- aggregate(x = loyalty$count, by = list(loyalty$loca_usable, loyalty$wd), sum)
+
+names(loy_ag)[1] <- "loca_usable"
+names(loy_ag)[2] <- "wd"
+names(loy_ag)[3] <- "count"
+
+ggplot(loy_ag, aes(wd, loca_usable, fill = count)) +
+  geom_tile() +
+  ggtitle("weekly heatmap of lyoalty transactions")
+```
+
+We can see that the result of cc transactions is quite similar to the loyalty transactions.
+
+Katerina's Cafe, Hippokampos, Guy's Gyros remian a high number of transactions in all 7 days, while Brew've Been Served showed no transactions at weekends.
+
+
+```{r}
+cc_aggre <- aggregate(x = cc$count, by = list(cc$loca_usable, cc$ts_new), sum)
+
+names(cc_aggre)[1] <- "loca_usable"
+names(cc_aggre)[2] <- "ts_new"
+names(cc_aggre)[3] <- "count"
+```
+
+```{r}
+cc_weekdays <- cc %>% 
+  filter(wd < "Saturday" & wd > "Sunday")
+cc_wkd_ag <- aggregate(x = cc_weekdays$count, by = list(cc_weekdays$loca_usable, cc_weekdays$hour), sum)
+
+names(cc_wkd_ag)[1] <- "loca_usable"
+names(cc_wkd_ag)[2] <- "hour"
+names(cc_wkd_ag)[3] <- "count"
+
+cc_weekends <- cc %>% 
+  filter(wd == "Saturday" | wd == "Sunday")
+cc_wke_ag <- aggregate(x = cc_weekends$count, by = list(cc_weekends$loca_usable, cc_weekends$hour), sum)
+
+names(cc_wke_ag)[1] <- "loca_usable"
+names(cc_wke_ag)[2] <- "hour"
+names(cc_wke_ag)[3] <- "count"
+```
+
+```{r}
+ggplot(cc_wkd_ag, aes(hour, loca_usable, fill = count)) +
+  geom_tile() +
+  scale_x_continuous(breaks = seq(2, 23, 2)) +
+  ggtitle("Hourly heatmap of cc transactions in weekday")
+```
+
+```{r}
+ggplot(cc_wke_ag, aes(hour, loca_usable, fill = count)) +
+  geom_tile() +
+  scale_x_continuous(breaks = seq(2, 23, 2)) +
+  ggtitle("Hourly heatmap of cc transactions in weekend")
+```
+
+Katerina's Cafe, the most popular place, did not have transactions record before 12pm, and is busy in 13pm and 20pm in weekday, 19-20pm in weekend. Hippokampos and Guy's Gyros are the same as Katerina's Cafe. Brew've Been Served is popular at morning, around 7-8 am at weekdays. Besides, Hallowed Grounds is also a popular place for breakfast at weekdays as Brew've Been Served.
+
+```{r}
+# cc_ag_f1w <- cc_aggre %>%
+#   filter(mday(ts_new) < 13)
+#   
+# ggplot(cc_ag_f1w, aes(ts_new, loca_usable, fill = count)) +
+#   geom_tile()
+```
+
+```{r}
+# cc_ag_f2w <- cc_aggre %>%
+#   filter(mday(ts_new) >= 13)
+#   
+# ggplot(cc_ag_f2w, aes(ts_new, loca_usable, fill = count)) +
+#   geom_tile()
+```
+
+```{r}
+cc_forprice <- select(cc, loca_usable, type, wd, last4ccnum, price)
+loy_forprice <- select(loyalty, loca_usable, type, wd, loyaltynum, price)
+
+names(cc_forprice)[4] <- "cardnum"
+names(loy_forprice)[4] <- "cardnum"
+
+price_alldata <- union(cc_forprice, loy_forprice)
+```
+
+```{r}
+price_alldata_wd <- price_alldata %>% 
+  filter(wd != "Sunday" & wd != "Saturday")
+
+ggplot(data = price_alldata_wd, aes(x = loca_usable, y = price, fill = type)) +
+  geom_boxplot(position = position_dodge(1)) +
+  coord_flip()
+```
+
+
+```{r}
+price_alldata_we <- price_alldata %>% 
+  filter(wd == "Sunday" | wd == "Saturday")
+
+ggplot(data = price_alldata_we, aes(x = loca_usable, y = price, fill = type)) +
+  geom_boxplot(position = position_dodge(1)) +
+  coord_flip()
+```
+
+anomalies
+
+* For Kronos Mart, there are several transactions happened at 3am.
+
+```{r}
+temp <- cc %>% 
+  filter(hour == 3)
+
+DT::datatable(temp)
+```
+
+* for Daily Dealz, there is only one transaction that happened at 6am at Monday.
+
+```{r}
+temp <- cc %>% 
+  filter(hour == 6)
+
+DT::datatable(temp)
+```
+
+Add the vehicle data to your analysis of the credit and loyalty card data. How does your assessment of the anomalies in question 1 change based on this new data? What discrepancies between vehicle, credit, and loyalty card data do you find? Please limit your answer to 8 images and 500 words.
+
+import data
+
+```{r}
+bgmap <- raster("Geospatial/MC2-tourist.tif")
+bgmap
+```
+
+plot a raster layer
+
+```{r}
+tmap_mode("plot")
+tm_shape(bgmap) +
+  tm_raster(bgmap,
+            legend.show = FALSE)
+```
+
+tm_rgb only allow to use 3 bands.
+
+```{r}
+tm_shape(bgmap) +
+  tm_rgb(bgmap, r = 1, g = 2, b = 3, 
+         alpha = NA,
+         saturation = 1,
+         interpolate = TRUE,
+         max.value = 255)
+```
+
+
+
+```{r}
+abila_st <- st_read(dsn = "Geospatial",
+                    layer = "Abila")
+```
+
+read gps.csv
+
+```{r}
+gps <- read_csv("data/gps.csv")
+glimpse(gps)
+```
+
+timestamp is not in date-time format, id is not double.
+
+```{r}
+gps$Timestamp <- date_time_parse(gps$Timestamp,
+                                 zone = "",
+                                 format = "%m/%d/%Y %H:%M:%S")
+gps$id <- as_factor(gps$id)
+```
+
+# GeoVisual Analysis
+
+
+crs 4326: wgs84
+
+```{r}
+gps_sf <- st_as_sf(gps,
+                   coords = c("long","lat"),
+                   crs = 4326)
+```
+
+
+
+```{r}
+gps_sf$hour <- hour(gps_sf$Timestamp)
+gps_sf$wd <- wday(gps_sf$Timestamp, label = TRUE, abbr = FALSE)
+gps_sf$count <- 1
+
+# gps_sf_early <- gps_sf %>% 
+#   filter(hour(gps_sf$Timestamp) < 7)
+# 
+# gps_sf_late <- gps_sf %>% 
+#   filter(hour(gps_sf$Timestamp) > 20)
+# 
+# gps_sf_wh <- gps_sf %>% 
+#   filter(hour(gps_sf$Timestamp) >= 7 |hour(gps_sf$Timestamp) <= 20)
+
+gps_sf_we <- gps_sf %>% 
+  filter(wd == "Saturday" | wd == "Sunday")
+
+gps_sf_wd <- gps_sf %>% 
+  filter(wd >"Sunday" & wd < "Saturday")
+```
+
+```{r}
+gps_ag_wd <- aggregate(x = gps_sf_wd$count, by = list(gps_sf_wd$id, gps_sf_wd$hour), sum)
+
+names(gps_ag_wd)[1] <- "id"
+names(gps_ag_wd)[2] <- "hour"
+names(gps_ag_wd)[3] <- "count"
+
+gps_ag_we <- aggregate(x = gps_sf_we$count, by = list(gps_sf_we$id, gps_sf_we$hour), sum)
+
+names(gps_ag_we)[1] <- "id"
+names(gps_ag_we)[2] <- "hour"
+names(gps_ag_we)[3] <- "count"
+
+
+ggplot(gps_ag_wd, aes(hour, id, fill = count)) +
+  geom_tile() +
+  scale_x_continuous(breaks = seq(0, 24, 2)) +
+  ggtitle("Hourly heatmap of gps of different trunk in weekdays")
+```
+
+```{r}
+ggplot(gps_ag_we, aes(hour, id, fill = count)) +
+  geom_tile() +
+  scale_x_continuous(breaks = seq(0, 24, 2)) +
+  ggtitle("Hourly heatmap of gps of different trunk in weekends")
+```
+
+```{r}
+idnum <- 16
+hournum <- 4
+
+temp <- gps %>% 
+  filter(id == idnum & hour(Timestamp) < hournum)
+temp$mday <- mday(temp$Timestamp)
+temp$hour <- hour(temp$Timestamp)
+
+DT::datatable(temp)
+```
+
+
+```{r}
+daynum <- 7
+
+gps_path <- gps_sf %>% 
+  filter(mday(Timestamp) == daynum & hour(Timestamp) < hournum) %>% 
+  group_by(id) %>% 
+  summarize(m = mean(Timestamp),
+            do_union = FALSE) %>% 
+  st_cast("LINESTRING")
+
+gps_path_selected <- gps_path %>%
+  filter(id == idnum)
+tmap_mode("view")
+tm_shape(bgmap) +
+  tm_rgb(bgmap, r = 1, g = 2, b = 3,
+         alpha = NA,
+         saturation = 1,
+         interpolate = TRUE,
+         max.value = 255) +
+  tm_shape(gps_path_selected) +
+  tm_lines()
+```
+
+```{r}
+# shp <- read_sf("Geospatial/Abila.shp")
+# mv_tif <- raster("Geospatial/MC2-tourist.tif")
+# 
+# mapview(mv_shp) +
+#   mapview(mv_tif) +
+#   mapview(gps_path_selected, color = "black")
+```
+```{r}
+tmap_mode("view")
+tm_shape(bgmap) +
+  tm_rgb(bgmap, r = 1, g = 2, b = 3,
+         alpha = NA,
+         saturation = 1,
+         interpolate = TRUE,
+         max.value = 255) +
+  tm_shape(gps_path_selected) +
+  tm_dots()
+```
+
+```{r}
+temp <- gps_sf %>% 
+  filter(mday(Timestamp) == daynum & id == idnum)
+
+DT::datatable(temp)
+```
+
+
+```{r}
+gps_path_selected <- gps_path %>% 
+  filter(id == 3)
+tmap_mode("view")
+tm_shape(bgmap) +
+  tm_rgb(bgmap, r = 1, g = 2, b = 3,
+         alpha = NA,
+         saturation = 1,
+         interpolate = TRUE,
+         max.value = 255) +
+  tm_shape(gps_path_selected) +
+  tm_lines()
+```
+
+```{r}
+gps_path_selected <- gps_path %>% 
+  filter(id == 4)
+tmap_mode("view")
+tm_shape(bgmap) +
+  tm_rgb(bgmap, r = 1, g = 2, b = 3,
+         alpha = NA,
+         saturation = 1,
+         interpolate = TRUE,
+         max.value = 255) +
+  tm_shape(gps_path_selected) +
+  tm_lines()
+```
+
+Can you infer the owners of each credit card and loyalty card? What is your evidence? Where are there uncertainties in your method? Where are there uncertainties in the data? Please limit your answer to 8 images and 500 words.
+
+
+
+
+Given the data sources provided, identify potential informal or unofficial relationships among GASTech personnel. Provide evidence for these relationships. Please limit your response to 8 images and 500 words.
+
+Do you see evidence of suspicious activity? Identify 1- 10 locations where you believe the suspicious activity is occurring, and why Please limit your response to 10 images and 500 words.
+
+If you solved this mini-challenge in 2014, how did you approach it differently this year?
+
+
