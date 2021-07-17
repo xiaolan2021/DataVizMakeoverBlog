@@ -411,7 +411,7 @@ ggplot(gps_ag_we, aes(hour, id, fill = count)) +
 ```
 
 ```{r}
-idnum <- 16
+idnum <- 1
 hournum <- 4
 
 temp <- gps %>% 
@@ -426,7 +426,7 @@ DT::datatable(temp)
 ```{r}
 daynum <- 7
 
-gps_path <- gps_sf %>% 
+gps_path <- gps_sf %>%
   filter(mday(Timestamp) == daynum & hour(Timestamp) < hournum) %>% 
   group_by(id) %>% 
   summarize(m = mean(Timestamp),
@@ -475,31 +475,31 @@ DT::datatable(temp)
 
 
 ```{r}
-gps_path_selected <- gps_path %>% 
-  filter(id == 3)
-tmap_mode("view")
-tm_shape(bgmap) +
-  tm_rgb(bgmap, r = 1, g = 2, b = 3,
-         alpha = NA,
-         saturation = 1,
-         interpolate = TRUE,
-         max.value = 255) +
-  tm_shape(gps_path_selected) +
-  tm_lines()
+# gps_path_selected <- gps_path %>% 
+#   filter(id == 3)
+# tmap_mode("view")
+# tm_shape(bgmap) +
+#   tm_rgb(bgmap, r = 1, g = 2, b = 3,
+#          alpha = NA,
+#          saturation = 1,
+#          interpolate = TRUE,
+#          max.value = 255) +
+#   tm_shape(gps_path_selected) +
+#   tm_lines()
 ```
 
 ```{r}
-gps_path_selected <- gps_path %>% 
-  filter(id == 4)
-tmap_mode("view")
-tm_shape(bgmap) +
-  tm_rgb(bgmap, r = 1, g = 2, b = 3,
-         alpha = NA,
-         saturation = 1,
-         interpolate = TRUE,
-         max.value = 255) +
-  tm_shape(gps_path_selected) +
-  tm_lines()
+# gps_path_selected <- gps_path %>% 
+#   filter(id == 4)
+# tmap_mode("view")
+# tm_shape(bgmap) +
+#   tm_rgb(bgmap, r = 1, g = 2, b = 3,
+#          alpha = NA,
+#          saturation = 1,
+#          interpolate = TRUE,
+#          max.value = 255) +
+#   tm_shape(gps_path_selected) +
+#   tm_lines()
 ```
 
 Can you infer the owners of each credit card and loyalty card? What is your evidence? Where are there uncertainties in your method? Where are there uncertainties in the data? Please limit your answer to 8 images and 500 words.
